@@ -44,7 +44,10 @@ exports.preferenceValidationRules = () => {
       .notEmpty()
       .withMessage("Please add valid key")
       .custom((value) => {
-        if (value && !preferencesEnum.includes(value)) {
+        if (
+          value &&
+          !value.every((preference) => preferencesEnum.includes(preference))
+        ) {
           throw new Error(`Must be one of ${preferencesEnum}`);
         }
         return true;

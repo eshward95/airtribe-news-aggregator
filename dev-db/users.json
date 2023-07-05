@@ -1,11 +1,1 @@
-[
-    {
-        "preference": "entertainment",
-        "_id": 1,
-        "createdAt": "2023-07-05T12:02:29.491Z",
-        "password": "$2a$04$LqecNbKdlp1nYrMlNCQSOe1eugq9SDqSoNg/PDQlfD7H1yVGrm.cy",
-        "role": "admin",
-        "email": "ed@ed.com",
-        "name": "er"
-    }
-]
+[{"preference":["sports","health"],"_id":1,"createdAt":"2023-07-05T12:02:29.491Z","password":"$2a$04$LqecNbKdlp1nYrMlNCQSOe1eugq9SDqSoNg/PDQlfD7H1yVGrm.cy","role":"admin","email":"ed@ed.com","name":"er","readarticle":[],"favoriteArticle":[{"source":{"id":"google-news","name":"Google News"},"author":"eldoce","title":"Íntimos con Natalia Oreiro y Fernán Mirás: adelanto exclusivo de la comedia \"Casi muerta\" - eldoce","description":null,"url":"https://news.google.com/rss/articles/CCAiC1M1Q1BHZGRNLTFBmAEB?oc=5","urlToImage":null,"publishedAt":"2023-07-04T16:28:40Z","content":null,"id":"ljpxcn2s4h"}]}]
