@@ -1,0 +1,11 @@
+[
+    {
+        "preference": "entertainment",
+        "_id": 1,
+        "createdAt": "2023-07-05T12:02:29.491Z",
+        "password": "$2a$04$LqecNbKdlp1nYrMlNCQSOe1eugq9SDqSoNg/PDQlfD7H1yVGrm.cy",
+        "role": "admin",
+        "email": "ed@ed.com",
+        "name": "er"
+    }
+]
