@@ -6,12 +6,20 @@ const path = require("path");
 const { checkIdAlreadyAdded } = require("../helpers/validationHelpers");
 const { getNewsHelper } = require("../helpers/getNewshelper");
 
-// const newsPath = path.join(__dirname, "..", "..", "dev-db", "news.json");
 const usersPath = path.join(__dirname, "..", "..", "dev-db", "users.json");
 
 const checkId = (val, preference) => {
-  const newsData = getCacheItem(preference);
+  //we want to get the combined result of both keys in cache
+  //In cache we store key value pairs
+  const newsData = preference.reduce((acc, curr) => {
+    const cachedData = getCacheItem(curr);
+    if (cachedData) {
+      acc.push(...cachedData);
+    }
+    return acc;
+  }, []);
   const news = newsData.find((value) => value.id === val);
+
   if (!news) {
     return false;
   }
@@ -25,11 +33,27 @@ exports.getNews = async (req, res, next) => {
       : "general";
     let cacheData;
     let fetchType = "";
-    cacheData = getCacheItem(preference);
-    if (cacheData) {
+    cacheData = preference.reduce((acc, curr) => {
+      const cachedData = getCacheItem(curr);
+      if (cachedData) {
+        acc.push(...cachedData);
+      }
+      return acc;
+    }, []);
+    console.log("cacheData", cacheData);
+    if (cacheData.length > 0) {
+      console.log("varalla");
       fetchType = "cache";
     } else {
-      cacheData = await getNewsHelper(preference);
+      //We are waiting for the promise to complete
+      const promise_arr = await Promise.all(
+        preference.map((val, i) => {
+          //get news details for each user preference
+          return getNewsHelper(val).then((newData) => newData);
+        })
+      );
+      //Combining and flattening the array
+      cacheData = promise_arr.flat();
       fetchType = "api";
     }
     return res
@@ -54,7 +78,13 @@ exports.getReadNews = (req, res, next) => {
   const preference = req.user.hasOwnProperty("preference")
     ? req.user.preference
     : "general";
-  const newsData = getCacheItem(preference);
+  const newsData = preference.reduce((acc, curr) => {
+    const cachedData = getCacheItem(curr);
+    if (cachedData) {
+      acc.push(...cachedData);
+    }
+    return acc;
+  }, []);
   if (!newsData) {
     return next(new CustomError("No news data", 404));
   }
@@ -69,7 +99,13 @@ exports.getFavoriteNews = (req, res, next) => {
     ? req.user.preference
     : "general";
 
-  const newsData = getCacheItem(preference);
+  const newsData = preference.reduce((acc, curr) => {
+    const cachedData = getCacheItem(curr);
+    if (cachedData) {
+      acc.push(...cachedData);
+    }
+    return acc;
+  }, []);
   if (!newsData) {
     return next(new CustomError("No news data", 404));
   }

@@ -27,7 +27,6 @@ function writeToCache() {
     .sort((a, b) => b[1].timestamp - a[1].timestamp)
     .slice(0, maxCacheSize)
     .reduce((obj, [key, value]) => {
-      console.log("some value ", obj, key);
       obj[key] = value;
       return obj;
     }, {});

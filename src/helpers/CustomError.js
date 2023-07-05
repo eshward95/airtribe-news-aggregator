@@ -8,5 +8,3 @@ class CustomError extends Error {
   }
 }
 module.exports = CustomError;
-
-// const error = new CustomError("Some error",404)

@@ -14,5 +14,5 @@ exports.correctPassword = (password, hashPassword) => {
 };
 
 exports.checkIdAlreadyAdded = (id, articleList) => {
-  return articleList.includes(id);
+  return articleList.some((res) => res.id === id);
 };
