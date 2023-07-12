@@ -1,6 +1,4 @@
 process.env.NODE_ENV = "test";
-const path = require("path");
-const fs = require("fs");
 let chai = require("chai");
 let chaiHttp = require("chai-http");
 chai.use(chaiHttp);
@@ -247,7 +245,7 @@ describe("User routes", () => {
           };
           chai
             .request(server)
-            .post("/signin")
+            .post("/login")
             .send(signInBody)
             .end((err, siginResponse) => {
               chai
@@ -256,7 +254,7 @@ describe("User routes", () => {
                 .set("authorization", `Bearer ${siginResponse.body.token}abcd`)
                 .end((err, res) => {
                   chai.expect(res.status).equal(401);
-                  chai.expect(res.body.message).equal("jwt malformed");
+                  chai.expect(res.body.message).equal("invalid signature");
                   done();
                 });
             });
