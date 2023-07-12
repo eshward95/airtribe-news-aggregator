@@ -23,7 +23,7 @@ exports.userValidationRules = () => {
           throw new Error(`Email already exists`);
         return true;
       }),
-    body("preference").default("general"),
+    body("preference").default(["general"]),
     body("role")
       .notEmpty()
       .withMessage("Role is required")
