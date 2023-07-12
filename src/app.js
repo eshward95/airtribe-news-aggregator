@@ -10,12 +10,15 @@ dotenv.config({ path: `./${env}.env` });
 const userRoutes = require("./routes/userRoutes");
 const newsRoutes = require("./routes/newsRoutes");
 const morgan = require("morgan");
+const { rateLimit } = require("./middleware/rateLimiter");
 
 const app = express();
 
 app.use(express.json());
 if (process.env.NODE_ENV != "test") app.use(morgan("dev"));
-
+//Using a rate limiter
+//To make max 10 requests in 2 seconds
+app.use(rateLimit);
 app.use("/", userRoutes);
 app.use("/news", newsRoutes);
 
