@@ -1,6 +1,15 @@
+const path = require("path");
+const { readFileHelper } = require("../helpers/fileHelpers");
 const { body, validationResult } = require("express-validator");
 const { checkAlreadyEmailExists } = require("../helpers/validationHelpers");
-
+const paths = path.join(
+  __dirname,
+  "..",
+  "..",
+  "dev-db",
+  `${process.env.USER_FILE_DB_NAME}`
+);
+const usersData = readFileHelper(paths);
 exports.userValidationRules = () => {
   const roleEnums = ["admin", "user"];
   return [
@@ -10,7 +19,7 @@ exports.userValidationRules = () => {
       .isEmail()
       .withMessage("Enter valid email")
       .custom((email) => {
-        if (email && checkAlreadyEmailExists(email))
+        if (email && checkAlreadyEmailExists(email, usersData))
           throw new Error(`Email already exists`);
         return true;
       }),

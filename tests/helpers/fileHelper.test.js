@@ -1,3 +1,4 @@
+process.env.NODE_ENV = "test";
 const fs = require("fs");
 const {
   readFileHelper,

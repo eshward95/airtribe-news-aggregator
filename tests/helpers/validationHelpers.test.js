@@ -5,16 +5,19 @@ const validationHelpers = require("./../../src/helpers/validationHelpers");
 
 describe("Testing the validator functions", function () {
   context("Testing Already Email added", () => {
-    let email = "ed@ed.com";
-    //   let email = "test@example.com";
+    let email = "test@example.com";
     it("should return true if email does not exist in user data", (done) => {
-      let response = validationHelpers.checkAlreadyEmailExists(email);
+      let response = validationHelpers.checkAlreadyEmailExists(email, [
+        { email: "test@example.com" },
+      ]);
       expect(response).to.be.true;
       done();
     });
     it("should return false if email does not exist in user data", (done) => {
-      email = "test@example.com";
-      let response = validationHelpers.checkAlreadyEmailExists(email);
+      email = "test@example.co";
+      let response = validationHelpers.checkAlreadyEmailExists(email, [
+        { email: "test@example.com" },
+      ]);
       expect(response).to.be.false;
       done();
     });
