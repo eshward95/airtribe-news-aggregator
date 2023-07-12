@@ -1,9 +1,9 @@
 const express = require("express");
 const newsController = require("../controllers/newsController");
-const authController = require("../controllers/authController");
+const authJWT = require("../middleware/authJWT");
 const router = express.Router();
 
-router.use(authController.protect);
+router.use(authJWT.protect);
 router.route("/").get(newsController.getNews);
 router.route("/search/:keyword").get(newsController.getNewsByQuery);
 

@@ -1,9 +1,7 @@
 const { getNewsHelper } = require("./getNewshelper");
 let intervalId;
 function startInterval(user) {
-  console.log("signup");
   if (intervalId) {
-    console.log("please");
     stopInterval();
   }
   // Check if user is logged in
@@ -17,7 +15,7 @@ function startInterval(user) {
         ? user.preference
         : "general";
       try {
-        getNewsHelper(preference);
+        await getNewsHelper(preference);
       } catch (error) {
         console.error(error);
       }

@@ -1,8 +1,16 @@
 # airtribe-news-aggregator 📰
 
-The API allow users to fetch news articles from multiple sources based on their preferences. The API enables users to register, log in, and set their news preferences (e.g., categories, sources) and fetches news articles from multiple sources using external news APIs (e.g., NewsAPI). The fetched articles are processed and filtered __asynchronously__ based on user preferences and are __cached__ to reduce the number of API calls. The __LRU algorithm__ is used to manage the cache and ensure that the most frequently accessed articles are stored. The cache is periodically updated using a cron job that calls the news API every __20 minutes__.
+- Users can register, log in, and set their news preferences using the API.
+- The API fetches news articles from multiple sources using external news APIs (Here, NewsAPI).
+- The fetched articles are processed and filtered __asynchronously__ based on user preferences and are cached to reduce the number of API calls.
+- The __LRU algorithm__ is used to manage the cache and ensure that the most frequently accessed articles are stored.
+- The cache is periodically updated using a cron job that calls the news API every __20 minutes__.
+- User authentication and route protection are implemented using __JWT tokens__.
+- __Input validation__ is performed for user sign-in, login, and preference updates.
+- Proper error handling is implemented for invalid requests and authentication errors.
+- A __rate limiter__ is implemented using __IP addresses__, allowing only 10 requests to be made in 2 seconds.
 
-In addition, the API includes user authentication and route protection using __JWT tokens__, and input validation for user sign-in, login, and preference updates. The API also includes proper error handling for invalid requests and authentication errors.
+Overall, this API provides a secure and efficient way for users to fetch news articles based on their preferences while minimizing the number of API calls and protecting against unauthorized access.
 
 ## Installation
 
@@ -13,6 +21,11 @@ To run application, you'll need to have Node.js installed on your machine.
 3. Start the server: `node src/server.js`
 
 The application should now be running at [http://localhost:3001](http://localhost:3001).
+
+## Running the Tests
+```JS
+npm test
+```
 
 ## Usage
 
@@ -47,15 +60,17 @@ The application allows you to perform the following operations:
   - `newsRouter.js`: Contains routes for fetching news articles and updating the news cache.
   - `userRouter.js`: Contains routes for getting the user list, updating user preferences, and getting preferences for a specific user.
 - `validators`: Contains validation files using Express-validator for user sign-in, login, and preference validations.
-- `config.dev`: Contains the environment variables for the news API key and simple JWT secret and expiration.
+- `dev.env`: Contains the environment variables for the news API key and simple JWT secret and expiration.
+- `test.env`: Contains the testing environment variables for the news API key and simple JWT secret and expiration.
+- `tests`: The tests folder contains automated tests for the application. The tests are organized into subfolders based on the component being tested: controllers, helpers, and routes.
 
 
 ## API Endpoints
 
 - `POST /register`: Register a new user.
 - `POST /login`: Log in a user.
-- `GET /preferences`: Retrieve the news preferences for the logged-in user.
-- `PUT /preferences`: Update the news preferences for the logged-in user.
+- `GET /preference`: Retrieve the news preferences for the logged-in user.
+- `PUT /preference`: Update the news preferences for the logged-in user.
 - `GET /news`: Fetch news articles based on the logged-in user's preferences.
 - `POST /news/:id/read`: Mark a news article as read.
 - `POST /news/:id/favorite`: Mark a news article as a favorite.
@@ -91,9 +106,20 @@ The allowed news preferences are "business", "entertainment", "general", "health
 - This ensures that the cached articles are up to date and reduces the number of API calls to the external news API.
 - We can modify the cache expiration period in the `lruCache.js` file.
 
+## Rate Limiting
+- Rate limiting is implemented using a __fixed window counter algorithm__, where a count of the number of requests made by a given IP address is stored in a hash map.
+- The hash map uses the IP address as the key and the count as the value.
+- Every time a request is made, the count for the corresponding IP address is incremented.
+- If the count exceeds the allowed limit, the request is rejected with a __429 Too Many Requests__ response.
+- Here, the API allows a maximum of __10 requests__ to be made from a single IP address every __2 seconds__.
+- Rate limiting also helps to prevent malicious attacks such as denial-of-service attacks that can overload the service and cause it to become unavailable.
+- We can modify the max number of requests and timers in the `rateLimiter.js` file.
+
 ## Testing the API
 
 To test the API, you can use a tool like Postman or cURL to send HTTP requests to the API endpoints
 
 You can also test the cache by sending multiple requests to the `/news` endpoint and verifying that the API returns cached articles for subsequent requests within the cache expiration period. You can modify the cache expiration period,maximum size of the cache and other cache-related configurations in the `lruCache.js` file.
+
+
 

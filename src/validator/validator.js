@@ -1,6 +1,15 @@
-const { body, validationResult } = require("express-validator");
+const path = require("path");
+const { readFileHelper } = require("../helpers/fileHelpers");
+const { body, validationResult, sanitize } = require("express-validator");
 const { checkAlreadyEmailExists } = require("../helpers/validationHelpers");
-
+const paths = path.join(
+  __dirname,
+  "..",
+  "..",
+  "dev-db",
+  `${process.env.USER_FILE_DB_NAME}`
+);
+const usersData = readFileHelper(paths);
 exports.userValidationRules = () => {
   const roleEnums = ["admin", "user"];
   return [
@@ -10,11 +19,12 @@ exports.userValidationRules = () => {
       .isEmail()
       .withMessage("Enter valid email")
       .custom((email) => {
-        if (email && checkAlreadyEmailExists(email))
+        if (email && checkAlreadyEmailExists(email, usersData))
           throw new Error(`Email already exists`);
         return true;
       }),
-    body("preference").default("general"),
+    body("preference").default(["general"]),
+    body("isValid").default("false"),
     body("role")
       .notEmpty()
       .withMessage("Role is required")
@@ -24,8 +34,9 @@ exports.userValidationRules = () => {
         }
         return true;
       }),
-    // password must be at least 5 chars long
     body("preferences").optional().isLength({ min: 3 }),
+    //To remove any html or js being added in post
+    body("*").escape(),
   ];
 };
 
@@ -40,6 +51,7 @@ exports.preferenceValidationRules = () => {
     "technology",
   ];
   return [
+    body("preference").isArray(),
     body("preference")
       .notEmpty()
       .withMessage("Please add valid key")
