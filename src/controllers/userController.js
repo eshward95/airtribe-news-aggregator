@@ -3,7 +3,13 @@ const path = require("path");
 const { readFileHelper, writeFileHelper } = require("../helpers/fileHelpers");
 
 // const newsPath = path.join(__dirname, "..", "..", "dev-db", "news.json");
-const usersPath = path.join(__dirname, "..", "..", "dev-db", "users.json");
+const usersPath = path.join(
+  __dirname,
+  "..",
+  "..",
+  "dev-db",
+  `${process.env.USER_FILE_DB_NAME}`
+);
 
 exports.getUsers = function (req, res, next) {
   const usersData = readFileHelper(usersPath);

@@ -1,16 +1,21 @@
 const express = require("express");
 const CustomError = require("./helpers/CustomError");
 const globalErrorHandler = require("./controllers/errorController");
-// require("./helpers/cron");
+const dotenv = require("dotenv");
+const env = process.env.NODE_ENV || "dev";
+console.log("env", env);
+
+dotenv.config({ path: `./${env}.env` });
 
 const userRoutes = require("./routes/userRoutes");
 const newsRoutes = require("./routes/newsRoutes");
-const cronMiddleware = require("./helpers/cron");
-const { protect } = require("./controllers/authController");
+const morgan = require("morgan");
 
 const app = express();
 
 app.use(express.json());
+
+app.use(morgan("dev"));
 
 app.use("/", userRoutes);
 app.use("/news", newsRoutes);
