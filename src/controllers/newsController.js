@@ -6,7 +6,13 @@ const path = require("path");
 const { checkIdAlreadyAdded } = require("../helpers/validationHelpers");
 const { getNewsHelper } = require("../helpers/getNewshelper");
 
-const usersPath = path.join(__dirname, "..", "..", "dev-db", "users.json");
+const usersPath = path.join(
+  __dirname,
+  "..",
+  "..",
+  "dev-db",
+  `${process.env.USER_FILE_DB_NAME}`
+);
 
 const checkId = (val, preference) => {
   //we want to get the combined result of both keys in cache
@@ -40,9 +46,7 @@ exports.getNews = async (req, res, next) => {
       }
       return acc;
     }, []);
-    console.log("cacheData", cacheData);
     if (cacheData.length > 0) {
-      console.log("varalla");
       fetchType = "cache";
     } else {
       //We are waiting for the promise to complete
