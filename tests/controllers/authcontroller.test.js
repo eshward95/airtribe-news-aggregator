@@ -6,32 +6,33 @@ const fs = require("fs");
 
 const server = require("../../src/app");
 
+let paths = path.join(__dirname, "..", "..", "dev-db", "test_users.json");
+
+before(function (done) {
+  console.log("calling  before each");
+  fs.writeFile(
+    paths,
+    JSON.stringify([]),
+    {
+      encoding: "utf8",
+      flag: "w",
+    },
+    done
+  );
+});
+after(function (done) {
+  console.log("calling after each");
+  fs.writeFile(
+    paths,
+    JSON.stringify([]),
+    {
+      encoding: "utf8",
+      flag: "w",
+    },
+    done
+  );
+});
 describe("Verifies the authcontroller", () => {
-  let paths = path.join(__dirname, "..", "..", "dev-db", "test_users.json");
-  before(function (done) {
-    console.log("calling  before each");
-    fs.writeFile(
-      paths,
-      JSON.stringify([]),
-      {
-        encoding: "utf8",
-        flag: "w",
-      },
-      done
-    );
-  });
-  after(function (done) {
-    console.log("calling after each");
-    fs.writeFile(
-      paths,
-      JSON.stringify([]),
-      {
-        encoding: "utf8",
-        flag: "w",
-      },
-      done
-    );
-  });
   context("Register user", () => {
     it("Successful signup", (done) => {
       const signInBody = {

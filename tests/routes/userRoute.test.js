@@ -7,31 +7,31 @@ chai.use(chaiHttp);
 const server = require("../../src/app");
 
 describe("User routes", () => {
-  let paths = path.join(__dirname, "..", "..", "dev-db", "test_users.json");
-  before(function (done) {
-    console.log("calling  before each");
-    fs.writeFile(
-      paths,
-      JSON.stringify([]),
-      {
-        encoding: "utf8",
-        flag: "w",
-      },
-      done
-    );
-  });
-  after(function (done) {
-    console.log("calling after each");
-    fs.writeFile(
-      paths,
-      JSON.stringify([]),
-      {
-        encoding: "utf8",
-        flag: "w",
-      },
-      done
-    );
-  });
+  //   let paths = path.join(__dirname, "..", "..", "dev-db", "test_users.json");
+  //   before(function (done) {
+  //     console.log("calling  before each");
+  //     fs.writeFile(
+  //       paths,
+  //       JSON.stringify([]),
+  //       {
+  //         encoding: "utf8",
+  //         flag: "w",
+  //       },
+  //       done
+  //     );
+  //   });
+  //   after(function (done) {
+  //     console.log("calling after each");
+  //     fs.writeFile(
+  //       paths,
+  //       JSON.stringify([]),
+  //       {
+  //         encoding: "utf8",
+  //         flag: "w",
+  //       },
+  //       done
+  //     );
+  //   });
   context("/register POST Create user", () => {
     it("Should create user", (done) => {
       const signInBody = {
@@ -158,7 +158,7 @@ describe("User routes", () => {
         });
     });
   });
-  context("/SnippetsGet all users", () => {
+  context("/Get all users", () => {
     it("signs in validates the token and fetches the users data", (done) => {
       let signupBody = {
         name: "test name",
