@@ -1,6 +1,6 @@
 const path = require("path");
 const { readFileHelper } = require("../helpers/fileHelpers");
-const { body, validationResult } = require("express-validator");
+const { body, validationResult, sanitize } = require("express-validator");
 const { checkAlreadyEmailExists } = require("../helpers/validationHelpers");
 const paths = path.join(
   __dirname,
@@ -24,6 +24,7 @@ exports.userValidationRules = () => {
         return true;
       }),
     body("preference").default(["general"]),
+    body("isValid").default("false"),
     body("role")
       .notEmpty()
       .withMessage("Role is required")
@@ -33,8 +34,9 @@ exports.userValidationRules = () => {
         }
         return true;
       }),
-    // password must be at least 5 chars long
     body("preferences").optional().isLength({ min: 3 }),
+    //To remove any html or js being added in post
+    body("*").escape(),
   ];
 };
 
@@ -49,6 +51,7 @@ exports.preferenceValidationRules = () => {
     "technology",
   ];
   return [
+    body("preference").isArray(),
     body("preference")
       .notEmpty()
       .withMessage("Please add valid key")
