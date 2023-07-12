@@ -1,4 +1,5 @@
 const express = require("express");
+const helmet = require("helmet");
 const CustomError = require("./helpers/CustomError");
 const globalErrorHandler = require("./controllers/errorController");
 const dotenv = require("dotenv");
@@ -14,11 +15,20 @@ const { rateLimit } = require("./middleware/rateLimiter");
 
 const app = express();
 
-app.use(express.json());
-if (process.env.NODE_ENV != "test") app.use(morgan("dev"));
+// Limiting the size of body to 5kb to avoid large data
+app.use(express.json({ limit: "5kb" }));
+
+//Logger middleware
 //Using a rate limiter
 //To make max 10 requests in 2 seconds
-app.use(rateLimit);
+if (process.env.NODE_ENV != "test") {
+  app.use(morgan("dev"));
+  app.use(rateLimit);
+}
+
+//Set security header of HTTP
+app.use(helmet());
+
 app.use("/", userRoutes);
 app.use("/news", newsRoutes);
 
