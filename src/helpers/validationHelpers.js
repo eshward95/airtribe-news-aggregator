@@ -1,11 +1,6 @@
-const path = require("path");
-const { readFileHelper } = require("./fileHelpers");
 const bcrypt = require("bcryptjs");
 
-const paths = path.join(__dirname, "..", "..", "dev-db", "users.json");
-const usersData = readFileHelper(paths);
-
-exports.checkAlreadyEmailExists = (val) => {
+exports.checkAlreadyEmailExists = (val, usersData) => {
   return usersData.some(({ email }) => val == email);
 };
 
