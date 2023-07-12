@@ -1,7 +1,7 @@
 const express = require("express");
-const userData = require("../../dev-db/users.json");
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
+const authJWT = require("../middleware/authJWT");
 const {
   validate,
   userValidationRules,
@@ -10,11 +10,11 @@ const {
 
 const router = express.Router();
 
-router.route("/users").get(authController.protect, userController.getUsers);
+router.route("/users").get(authJWT.protect, userController.getUsers);
 
 router
   .route("/preference")
-  .all(authController.protect)
+  .all(authJWT.protect)
   .get(userController.getPreference)
   .put(
     preferenceValidationRules(),
